@@ -1,4 +1,39 @@
+#[derive(Debug)]
+pub struct User{
+    name: String,
+    age: i32,
+    shoeSize: i32,
+    height: i32,
+}
+
+impl User {
+    //fn simple_string(&mut self) {
+    fn simple_string(&self) -> String {
+        format!("{} - {} - {}cm shoe: {}", self.name, self.age, self.height, self.shoeSize)
+    }
+    fn grow(&mut self, h:i32) {
+        self.height += h;
+    }
+    fn die(self) {
+        println!("Dead {} ", self.simple_string());
+    }
+}
+
 fn main() {
+    let mut u = User{
+        name: "Jack".to_string(),
+        age: 33,
+        height: 255,
+        shoeSize: 10,
+    };
+    println!("{:?}",u);
+    println!("User is {}",u.simple_string());
+    u.grow(10);
+    println!("User is {}",u.simple_string());
+    u.die();
+    //u.die();
+    //u.grow(10);
+
     let b  = highest(4, 2, 8);
     let s = format!("{} is highest", b);
     let o = other(1, 2);

@@ -6,6 +6,19 @@ pub struct User{
     height: i32,
 }
 
+#[derive(Debug)]
+pub struct Bed{
+    size:i32,
+    count:u32,
+}
+
+#[derive(Debug)]
+pub enum Room{
+    Kitchen(i32),
+    Bedroom(Bed),
+    Lounge(i32, String),
+}
+
 impl User {
     //fn simple_string(&mut self) {
     fn simple_string(&self) -> String {
@@ -20,6 +33,35 @@ impl User {
 }
 
 fn main() {
+
+    //enum
+
+    //let t = Room::Kitchen(4);
+    use self::Room::*;
+    //let t = Room::Bedroom(Bed{size:50, count:2});
+    //let t = Bedroom(Bed{size:50, count:2});
+    let t = Kitchen(4);
+    let l = Lounge(5, "big".to_string());
+    println!("Hello from the {:?}", t);
+    /*
+    match t {
+        Room::Kitchen(n) => println!("The room is a Kitchen with {} rooms", n),
+        d => println!("{:?}", d),
+    }
+    */
+    let v = match t {
+        Room::Kitchen(n) => n,
+        _ => 0,
+    } + 10;
+    println!("v is {}", v);
+
+    if let Kitchen(n) = t {
+        println!("Its a Kitchen with {} cupboards", n);
+    }
+
+    if let Lounge(n, s) = l {
+        println!("Its a {} Lounge with {} cupboards", n, s);
+    }
     let mut u = User{
         name: "Jack".to_string(),
         age: 33,

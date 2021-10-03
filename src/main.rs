@@ -7,6 +7,26 @@ fn main() {
     loop_to_10();
     array_loop();
     array_loop2();
+    //strings
+
+    let mut s = String::from("hello 中国");
+    println!("the length of s is {}", s.len());
+    println!("the number l of s is {}", count_l(&s));
+    //let s = "hello 中国";
+    //let mut s = "hello 中国";
+    s.push_str("herr");
+    for c in s.chars() {
+        println!("{}", c);
+    }
+    for (i, c) in s.chars().enumerate() {
+        println!("{} = {}", i, c);
+    }
+    for (i, c) in s.char_indices(){
+        println!("{} = {}", i, c);
+    }
+    for c in s.bytes() {
+        println!("{}", c);
+    }
 }
 
 fn highest(a:i32, b: u32, c: i8) -> i32 {
@@ -65,4 +85,14 @@ fn array_loop2() {
 
     }
 
+}
+
+fn count_l(s:&str) -> i32 {
+    let mut res = 0;
+    for c in s.chars() {
+        if c == 'l' {
+            res +=1;
+        }
+    }
+    res
 }

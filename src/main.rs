@@ -1,3 +1,5 @@
+extern crate rand;
+use rand::Rng;
 use std::collections::HashMap;
 use std::env::args;
 use std::ops::Add;
@@ -7,6 +9,15 @@ use std::ops::Add;
 pub struct Point{
     x:i32,
     y:i32,
+}
+impl Point {
+    fn random() -> Self{
+        let mut tr = rand::thread_rng();
+        Point{
+            x: tr.gen(),
+            y: tr.gen(),
+        }
+    }
 }
 impl Add for Point {
     type  Output = Point;
@@ -59,6 +70,9 @@ fn main() {
     let b = Point{x:30, y:50};
     let c = a + b;
     println!("c = {:?}", c);
+    let d = Point::random();
+    println!("d = {:?}", d);
+
 
 
     for a in args() {

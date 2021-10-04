@@ -1,8 +1,43 @@
 #[derive(PartialEq, Debug)]
 pub struct USD (i32);
+#[derive(PartialEq, Debug)]
 pub struct GBP (i32);
 #[derive(PartialEq, Debug)]
+
 pub struct CAD (i32);
+pub trait ToUSDv<F>{
+    fn to_uv(&self, g:F)->f32;
+}
+pub trait FromUSDv<F>{
+    fn from_uv(&self, f:f32)->F;
+}
+pub struct Ex {
+    cad: f32,
+    gbp: f32,
+}
+
+pub trait Exchange<F, T>{
+    fn convert(&self, f:F) -> T;
+}
+
+impl<E, F, T> Exchange< F, T> for E 
+    where E:ToUSDv<F> + FromUSDv<T>
+{
+    fn convert(&self, f:F) -> T {
+        self.from_uv(self.to_uv(f))
+    }
+}
+impl ToUSDv<GBP> for Ex {
+    fn to_uv(&self, g:GBP) -> f32 {
+        g.0 as f32 * self.gbp
+    }
+}
+impl FromUSDv<CAD> for Ex {
+    fn from_uv(&self, f:f32) -> CAD {
+        CAD((f / self.cad) as i32)
+    }
+}
+
 pub trait ToUSD {
     fn to_usd(&self) -> USD; 
     fn convert<T:FromUSD>(&self) -> T {
@@ -37,5 +72,14 @@ mod tests {
 
         let c2:CAD = g.convert();
         assert_eq!(c2, c);
+
+        let g = GBP(200);
+        let ex = Ex{cad: 0.7, gbp: 1.3};
+        let c = ex.from_uv(ex.to_uv(g));
+        assert_eq!(c, CAD(371));
+
+        let g2 = GBP(200);
+        let d:CAD = ex.convert(g2);
+        assert_eq!(d, CAD(371));
     }
 }

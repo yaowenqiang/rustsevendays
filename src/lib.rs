@@ -1,10 +1,12 @@
+//! A library for handling money
+
 use std::ops::AddAssign;
 use std::cmp::PartialOrd;
 use std::fmt::Display;
 use std::fmt;
 use std::str::FromStr;
 
-mod parse;
+pub mod parse;
 use parse::*;
 
 #[derive(PartialEq, Debug)]
@@ -29,9 +31,14 @@ impl Clone for USD {
 impl Copy for USD {
 }
 
+/// Parse your money from a string
+/// ```
+/// use self::*;
+/// let g = "£32.45".parse();
+/// assert_eq!(g, Ok(GBP(3245)));
+/// ```
 #[derive(PartialEq, Debug, Clone)]
 pub struct GBP (i32);
-
 impl FromStr for GBP {
     //type Err = ParseMoneyError;
     type Err = GBPError;
@@ -121,6 +128,7 @@ pub enum GBPError {
     OtherError,
 }
 
+
 impl From<ParseMoneyError> for GBPError {
     fn from(p:ParseMoneyError) -> Self {
         GBPError::ParseError(p)
@@ -197,8 +205,6 @@ mod tests {
     use super::*;
     #[test]
     fn it_works() {
-        let g = "£32.45".parse();
-        assert_eq!(g, Ok(GBP(3245)));
         let u = USD(230);
         assert_eq!(u.to_string(), "$2.30".to_string());
 

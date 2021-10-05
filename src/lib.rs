@@ -1,9 +1,8 @@
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Clone)]
 pub struct USD (i32);
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Clone)]
 pub struct GBP (i32);
-#[derive(PartialEq, Debug)]
-
+#[derive(PartialEq, Debug, Clone)]
 pub struct CAD (i32);
 pub trait ToUSDv<F>{
     fn to_uv(&self, g:F)->f32;
@@ -11,9 +10,24 @@ pub trait ToUSDv<F>{
 pub trait FromUSDv<F>{
     fn from_uv(&self, f:f32)->F;
 }
+impl Account for Ex {
+    fn id(&self) -> i32 {self.ac_id}
+}
+
 pub struct Ex {
+    ac_id: i32,
     cad: f32,
     gbp: f32,
+}
+#[derive(PartialEq, Debug)]
+pub struct Transaction<A> {
+    from_id:i32,
+    to_id:i32,
+    amount:A,
+}
+
+pub trait Account {
+    fn id(&self) -> i32;
 }
 
 pub trait Exchange<F, T>{
@@ -59,6 +73,24 @@ impl FromUSD for CAD {
        CAD(u.0 * 130 / 100) 
     }
 }
+
+pub trait ExchangeAccount<F, T> {
+    fn exchange(&self, f_id:i32, t_id:i32, amount:F)
+    -> (Transaction<F>, Transaction<T>);
+}
+
+impl<E, F, T> ExchangeAccount<F, T> for E
+where E:Exchange<F, T> + Account, 
+      F:Clone,
+{
+    fn exchange(&self, f_id:i32, t_id:i32, amount:F)
+    ->(Transaction<F>, Transaction<T>) {
+        let ft = Transaction{from_id: f_id, to_id:self.id(), amount:amount.clone()};
+        let tt = Transaction{from_id: self.id(), to_id:t_id, amount:self.convert(amount)};
+        (ft, tt)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -74,12 +106,18 @@ mod tests {
         assert_eq!(c2, c);
 
         let g = GBP(200);
-        let ex = Ex{cad: 0.7, gbp: 1.3};
+        let ex = Ex{ac_id:0,cad: 0.7, gbp: 1.3};
         let c = ex.from_uv(ex.to_uv(g));
         assert_eq!(c, CAD(371));
 
         let g2 = GBP(200);
         let d:CAD = ex.convert(g2);
         assert_eq!(d, CAD(371));
+
+        let ex2 = Ex{ac_id:30, cad:0.7, gbp:1.3};
+        let (ft, tt) = ex2.exchange(20, 40, GBP(200));
+        assert_eq!(ft, Transaction{from_id:20, to_id:30, amount:GBP(200)});
+        assert_eq!(tt, Transaction{from_id:30, to_id:40, amount:CAD(371)});
+
     }
 }

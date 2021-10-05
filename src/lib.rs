@@ -1,7 +1,61 @@
+use std::ops::AddAssign;
+use std::cmp::PartialOrd;
+
 #[derive(PartialEq, Debug, Clone)]
 pub struct USD (i32);
 #[derive(PartialEq, Debug, Clone)]
 pub struct GBP (i32);
+#[derive(PartialEq, Debug, Clone)]
+
+pub struct Stepper<T> {
+    curr:T,
+    step: T,
+    stop: T,
+}
+
+impl<T>Stepper<T> {
+    pub fn new(start: T, stop: T, step:T) -> Self {
+        Stepper{
+            curr: start,
+            stop: stop,
+            step: step,
+        }
+    }
+}
+fn sum_list<I, S>(i:I, mut s:S) -> S 
+    //where I: Iterator<Item=S>,
+    where I: IntoIterator<Item=S>,
+          S: AddAssign
+    {
+        /*
+    for n in i {
+        s += n;
+    }
+    s
+    */
+    let mut it = i.into_iter();
+    while let Some(n) = it.next() {
+        s += n;
+    }
+    s
+}
+
+impl<T> Iterator for Stepper<T>
+where T:AddAssign + Copy + PartialOrd {
+    type Item = T;
+    fn next(&mut self) -> Option<T> {
+        if self.curr >= self.stop {
+            return None;
+        }
+        println!("step next");
+        let res = self.curr;
+        self.curr += self.step;
+        Some(res)
+    }
+}
+
+
+
 #[derive(PartialEq, Debug, Clone)]
 pub struct CAD (i32);
 pub trait ToUSDv<F>{
@@ -96,6 +150,18 @@ mod tests {
     use super::*;
     #[test]
     fn it_works() {
+        let mut c = 0;
+        for n in Stepper::new(2, 10, 2) {
+            c += n;
+        }
+        assert_eq!(c, 20);
+
+        let sl = sum_list(Stepper::new(3, 10, 2), 0);
+        assert_eq!(sl, 24);
+
+        let fl = Stepper::new(4, 10, 2).fold(0, | acc, x | acc + x);
+        assert_eq!(fl, 18);
+
         let g = GBP(200);
         let u = g.to_usd();
         assert_eq!(u, USD(260));

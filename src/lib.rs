@@ -2,6 +2,10 @@ use std::ops::AddAssign;
 use std::cmp::PartialOrd;
 use std::fmt::Display;
 use std::fmt;
+use std::str::FromStr;
+
+mod parse;
+use parse::*;
 
 #[derive(PartialEq, Debug)]
 pub struct USD (i32);
@@ -27,8 +31,16 @@ impl Copy for USD {
 
 #[derive(PartialEq, Debug, Clone)]
 pub struct GBP (i32);
-#[derive(PartialEq, Debug, Clone)]
 
+impl FromStr for GBP {
+    //type Err = ParseMoneyError;
+    type Err = GBPError;
+    fn from_str(s:&str) -> Result<Self, Self::Err> {
+        Ok(GBP(parse_sym_money(s,'£', 2)?))
+    }
+}
+
+#[derive(PartialEq, Debug, Clone)]
 pub struct Stepper<T> {
     curr:T,
     step: T,
@@ -102,6 +114,19 @@ pub struct Transaction<A> {
     amount:A,
 }
 
+
+#[derive(PartialEq, Debug)]
+pub enum GBPError {
+    ParseError(ParseMoneyError),
+    OtherError,
+}
+
+impl From<ParseMoneyError> for GBPError {
+    fn from(p:ParseMoneyError) -> Self {
+        GBPError::ParseError(p)
+    }
+}
+
 pub trait Account {
     fn id(&self) -> i32;
 }
@@ -172,6 +197,8 @@ mod tests {
     use super::*;
     #[test]
     fn it_works() {
+        let g = "£32.45".parse();
+        assert_eq!(g, Ok(GBP(3245)));
         let u = USD(230);
         assert_eq!(u.to_string(), "$2.30".to_string());
 

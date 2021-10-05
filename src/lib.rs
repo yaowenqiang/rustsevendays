@@ -1,8 +1,30 @@
 use std::ops::AddAssign;
 use std::cmp::PartialOrd;
+use std::fmt::Display;
+use std::fmt;
 
-#[derive(PartialEq, Debug, Clone)]
+#[derive(PartialEq, Debug)]
 pub struct USD (i32);
+
+impl Display for USD {
+    fn fmt(&self, f:&mut fmt::Formatter) -> fmt::Result {
+        let r = (self.0 as f32) / 100.;
+        if r < 0. {
+            write!(f, "-$ {:.2}", -r);
+        }
+        write!(f, "${:.2}", r)
+    }
+}
+
+impl Clone for USD {
+    fn clone(&self)->USD {
+        USD(self.0)
+    }
+}
+
+impl Copy for USD {
+}
+
 #[derive(PartialEq, Debug, Clone)]
 pub struct GBP (i32);
 #[derive(PartialEq, Debug, Clone)]
@@ -150,11 +172,19 @@ mod tests {
     use super::*;
     #[test]
     fn it_works() {
+        let u = USD(230);
+        assert_eq!(u.to_string(), "$2.30".to_string());
+
+        //let b = u.clone();
+        let b = u;
+        assert_eq!(u, b);
+
         let mut c = 0;
         for n in Stepper::new(2, 10, 2) {
             c += n;
         }
         assert_eq!(c, 20);
+
 
         let sl = sum_list(Stepper::new(3, 10, 2), 0);
         assert_eq!(sl, 24);

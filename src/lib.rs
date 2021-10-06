@@ -22,6 +22,16 @@ impl Display for USD {
     }
 }
 
+pub fn trim_left<'a>(s:&'a str) ->&'a str {
+    for (i, c) in s.char_indices() {
+        if c == ' ' {
+            continue;
+        }
+        return s.get(i..s.len()).unwrap();
+    }
+    ""
+}
+
 impl Clone for USD {
     fn clone(&self)->USD {
         USD(self.0)
@@ -33,12 +43,31 @@ impl Copy for USD {
 
 /// Parse your money from a string
 /// ```
-/// use self::*;
+/// use sevenday::*;
 /// let g = "£32.45".parse();
 /// assert_eq!(g, Ok(GBP(3245)));
 /// ```
 #[derive(PartialEq, Debug, Clone)]
 pub struct GBP (i32);
+
+/*
+fn money_pointer<'a>(i:i32) -> &'a GBP {
+    let g = GBP(i);
+    &g
+}
+*/
+
+fn on_money(a:i32, b:i32) -> GBP {
+    let mut g = GBP(a);
+    let r;
+    {
+        r = &g;
+        g.0 += 2;
+    }
+    let res = GBP(r.0 + b);
+    res
+}
+
 impl FromStr for GBP {
     //type Err = ParseMoneyError;
     type Err = GBPError;
@@ -204,7 +233,20 @@ where E:Exchange<F, T> + Account,
 mod tests {
     use super::*;
     #[test]
+
+
     fn it_works() {
+        //let g = money_pointer(3);
+        assert_eq!(trim_left("     hello"), "hello");
+        let mut s = " .   hello".to_string();
+        {
+            let s2 = trim_left(&s);
+            assert_eq!(s2, "hello");
+        }
+        s.push_str(" world");
+        assert_eq!(trim_left(&s), "hello world");
+        let g = on_money(1, 2);
+        assert_eq!(g, GBP(3));
         let u = USD(230);
         assert_eq!(u.to_string(), "$2.30".to_string());
 

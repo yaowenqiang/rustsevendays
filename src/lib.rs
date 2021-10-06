@@ -6,11 +6,42 @@ use std::fmt::Display;
 use std::fmt;
 use std::str::FromStr;
 
+use self::LinkedList::*;
+
 pub mod parse;
 use parse::*;
 
 #[derive(PartialEq, Debug)]
 pub struct USD (i32);
+
+#[derive(PartialEq, Debug)]
+pub enum LinkedList<T> {
+    Tail,
+    Head(T, Box<LinkedList<T>>)
+}
+
+impl<T> LinkedList<T> {
+    pub fn empty() -> Self {
+        Tail
+    }
+    pub fn new(t:T) -> Self {
+        Head(t, Box::new(Tail))
+    }
+
+    pub fn push(self, t:T) -> Self {
+        Head(t, Box::new(self))
+    }
+    pub fn push_back(&mut self, t:T) {
+        match self {
+            Tail => {
+                *self = LinkedList::new(t);
+            },
+            Head(_,n) => {
+                n.push_back(t);
+            }
+        }
+    }
+}
 
 impl Display for USD {
     fn fmt(&self, f:&mut fmt::Formatter) -> fmt::Result {
@@ -236,6 +267,13 @@ mod tests {
 
 
     fn it_works() {
+
+        let mut l = LinkedList::new(3);
+        l = l.push(4);
+        assert_eq!(l, Head(4, Box::new(Head(3, Box::new(Tail)))));
+        l.push_back(2);
+        assert_eq!(l, Head(4, Box::new(Head(3, Box::new(Head(2, Box::new(Tail)))))));
+
         //let g = money_pointer(3);
         assert_eq!(trim_left("     hello"), "hello");
         let mut s = " .   hello".to_string();

@@ -6,12 +6,23 @@ use std::fmt::Display;
 use std::fmt;
 use std::str::FromStr;
 use self::LinkedList::*;
+use std::rc::Rc;
+use std::cell::RefCell;
+
 
 pub mod parse;
 use parse::*;
 
 static N:i32 = 55;
 static mut M:i32 = 55;
+
+pub fn make_rc(i:i32) -> Rc<RefCell<i32>> {
+    let a = Rc::new(RefCell::new(i));
+    let b = a.clone();
+    let m = &mut *a.borrow_mut();
+    *m += 2;
+    return b;
+}
 
 pub fn add_stat(n:i32) -> i32 {
     unsafe {
@@ -284,6 +295,10 @@ mod tests {
 
 
     fn it_works() {
+        let r = make_rc(5);
+        assert_eq!(*r.borrow(), 7);
+
+
         assert_eq!(*get_st(), 55);
         assert_eq!(stat_str(), "hello");
         assert_eq!(add_stat(5), 60);

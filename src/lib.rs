@@ -5,11 +5,28 @@ use std::cmp::PartialOrd;
 use std::fmt::Display;
 use std::fmt;
 use std::str::FromStr;
-
 use self::LinkedList::*;
 
 pub mod parse;
 use parse::*;
+
+static N:i32 = 55;
+static mut M:i32 = 55;
+
+pub fn add_stat(n:i32) -> i32 {
+    unsafe {
+        M += n;
+        M
+    }
+}
+
+pub fn get_st() -> &'static i32 {
+    &N
+}
+pub fn stat_str() -> &'static str {
+    "hello"
+}
+
 
 #[derive(PartialEq, Debug)]
 pub struct USD (i32);
@@ -267,6 +284,9 @@ mod tests {
 
 
     fn it_works() {
+        assert_eq!(*get_st(), 55);
+        assert_eq!(stat_str(), "hello");
+        assert_eq!(add_stat(5), 60);
 
         let mut l = LinkedList::new(3);
         l = l.push(4);

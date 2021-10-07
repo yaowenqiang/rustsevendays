@@ -5,7 +5,8 @@ use std::env::args;
 use std::ops::Add;
 use std::env::{var,set_var};
 use std::process::{Command, Stdio};
-use std::io::copy;
+use std::io::{Read, Write, copy};
+use std::fs::File;
 
 pub fn road_len() -> usize{
     let e = var("ROAD").unwrap_or("".to_string());
@@ -78,6 +79,14 @@ impl User {
 }
 
 fn main() {
+    //read and write files
+    let mut s = String::new();
+    let mut f = File::open("data/from.md").expect("can not open file");
+    f.read_to_string(&mut s).expect("can't read file to string");
+    println!("{}", s);
+    let mut t = File::create("data/to.md").expect("can not create file");
+    // copy(&mut f, &mut t).expect("can not copy file");
+    t.write_all(&s.into_bytes()).expect("can't write all");
     //pipe 
     let c = Command::new("espeak")
                      .stdin(Stdio::piped())

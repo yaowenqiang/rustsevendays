@@ -7,6 +7,8 @@ use std::env::{var,set_var};
 use std::process::{Command, Stdio};
 use std::io::{Read, Write, copy};
 use std::fs::File;
+use std::thread::{spawn, sleep};
+use std::time::Duration;
 
 pub fn road_len() -> usize{
     let e = var("ROAD").unwrap_or("".to_string());
@@ -79,6 +81,20 @@ impl User {
 }
 
 fn main() {
+    //threads
+    let h = spawn(|| {
+        for i in 0..10 {
+            sleep(Duration::from_millis(10));
+            println!("{}", i);
+        }
+        return 5;
+    });
+    for i in 10..20 {
+        sleep(Duration::from_millis(20));
+        println!("{}", i);
+    }
+    let r = h.join().unwrap();
+    println!("Done R = {}", r);
     //read and write files
     let mut s = String::new();
     let mut f = File::open("data/from.md").expect("can not open file");

@@ -3,8 +3,20 @@ use rand::Rng;
 use std::collections::HashMap;
 use std::env::args;
 use std::ops::Add;
+use std::env::{var,set_var};
 
+pub fn road_len() -> usize{
+    let e = var("ROAD").unwrap_or("".to_string());
+    e.len()
+}
 
+pub fn rail_len() -> usize{
+    let s = var("GWR").unwrap_or("".to_string());
+    _rail_len(&s)
+}
+pub fn _rail_len(s:&str) -> usize{
+    s.len()
+}
 #[derive(Debug)]
 pub struct Point{
     x:i32,
@@ -64,6 +76,16 @@ impl User {
 }
 
 fn main() {
+    //environment variables
+    let rail_length = _rail_len("Pointless Track");
+    println!("{}", rail_length);
+    let e = var("HELLO").unwrap();
+    println!("{}", e);
+    set_var("ROAD", "Route66");
+    let r_len = road_len();
+    println!("{}", r_len);
+
+
     //traits
 
     let a = Point{x:3, y:5};

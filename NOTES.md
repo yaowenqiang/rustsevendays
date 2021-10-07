@@ -5,4 +5,6 @@
 > cargo publish
 
 # day two assignment TODO
+# day three assignment TODO
 
+> HELLO=WORLD cargo run

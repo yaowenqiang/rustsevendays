@@ -121,7 +121,7 @@ fn on_money(a:i32, b:i32) -> GBP {
     let r;
     {
         r = &g;
-        g.0 += 2;
+        //g.0 += 2;
     }
     let res = GBP(r.0 + b);
     res

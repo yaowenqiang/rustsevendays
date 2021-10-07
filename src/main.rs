@@ -10,6 +10,9 @@ use std::fs::File;
 use std::thread::{spawn, sleep};
 use std::time::Duration;
 
+pub mod fib;
+use fib::*;
+
 pub fn road_len() -> usize{
     let e = var("ROAD").unwrap_or("".to_string());
     e.len()
@@ -81,6 +84,11 @@ impl User {
 }
 
 fn main() {
+    //fib
+    let mut map = HashMap::new();
+    for i in 0..40 {
+        println!("{} : {}", i, fib_dym(i, &mut map));
+    }
     //threads
     let h = spawn(|| {
         for i in 0..10 {

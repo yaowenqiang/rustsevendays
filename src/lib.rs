@@ -101,7 +101,7 @@ impl Copy for USD {
 }
 
 /// Parse your money from a string
-/// ```
+/// ```rust
 /// use sevenday::*;
 /// let g = "£32.45".parse();
 /// assert_eq!(g, Ok(GBP(3245)));

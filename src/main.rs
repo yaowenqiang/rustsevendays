@@ -1,5 +1,5 @@
 extern crate rand;
-use rand::Rng;
+use rand::{Rng,random};
 use std::collections::HashMap;
 use std::env::args;
 use std::ops::Add;
@@ -9,9 +9,12 @@ use std::io::{Read, Write, copy};
 use std::fs::File;
 use std::thread::{spawn, sleep};
 use std::time::Duration;
+use std::io;
 
 pub mod fib;
 use fib::*;
+pub mod randguess;
+use randguess::*;
 
 pub fn road_len() -> usize{
     let e = var("ROAD").unwrap_or("".to_string());
@@ -84,6 +87,17 @@ impl User {
 }
 
 fn main() {
+    let correct = random::<u8>();
+    loop {
+        let guess = get_guess();
+        if handle_guess(guess, correct) {
+            break;
+        }
+    }
+    let mut guess = String::new();
+    io::stdin().read_line(&mut guess);
+    println!("YOu guessed: {}", guess);
+
     //fib
     let mut map = HashMap::new();
     for i in 0..40 {

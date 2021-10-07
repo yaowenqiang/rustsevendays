@@ -9,3 +9,7 @@
 
 > HELLO=WORLD cargo run
 # day four assignment TODO
+
+# Documentation
+
+> cargo doc --open

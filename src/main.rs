@@ -4,7 +4,8 @@ use std::collections::HashMap;
 use std::env::args;
 use std::ops::Add;
 use std::env::{var,set_var};
-use std::process::Command;
+use std::process::{Command, Stdio};
+use std::io::copy;
 
 pub fn road_len() -> usize{
     let e = var("ROAD").unwrap_or("".to_string());
@@ -77,6 +78,18 @@ impl User {
 }
 
 fn main() {
+    //pipe 
+    let c = Command::new("espeak")
+                     .stdin(Stdio::piped())
+                     .spawn()
+                     .expect("command didn't run");
+    let d = Command::new("cat")
+                    .arg("data/tosay.md")
+                    .stdout(Stdio::piped())
+                    .spawn()
+                    .expect("cat didn't run right");
+    copy(&mut d.stdout.unwrap(), &mut c.stdin.unwrap());
+    
     // call other process
     let c = Command::new("ls")
                 .arg("-l")

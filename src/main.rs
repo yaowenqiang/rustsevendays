@@ -4,6 +4,7 @@ use std::collections::HashMap;
 use std::env::args;
 use std::ops::Add;
 use std::env::{var,set_var};
+use std::process::Command;
 
 pub fn road_len() -> usize{
     let e = var("ROAD").unwrap_or("".to_string());
@@ -76,6 +77,17 @@ impl User {
 }
 
 fn main() {
+    // call other process
+    let c = Command::new("ls")
+                .arg("-l")
+                .output()
+                .expect("LS not usable");
+    let c_out = String::from_utf8(c.stdout).expect("NOT UTF*able");
+    println!("{}", c_out);
+    for (n, ln) in c_out.split("\n").enumerate() {
+        println!("Line: {} : {}",n, ln );
+    }
+
     //environment variables
     let rail_length = _rail_len("Pointless Track");
     println!("{}", rail_length);

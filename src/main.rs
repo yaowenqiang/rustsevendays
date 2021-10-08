@@ -15,6 +15,8 @@ pub mod fib;
 use fib::*;
 pub mod randguess;
 use randguess::*;
+pub mod ownership;
+use ownership::*;
 
 pub fn road_len() -> usize{
     let e = var("ROAD").unwrap_or("".to_string());
@@ -87,6 +89,15 @@ impl User {
 }
 
 fn main() {
+    let mut values = vec![1,2,3,4,5];
+    //let sum = take_ownership_sum(values);
+    let sum = borrow_sum(&values);
+    println!("sum of {} values is {}", values.len(), sum);
+    values  = cap_values_owned(10, values);
+    for v in values {
+        println!("{}", v);
+    }
+
     let correct = random::<u8>();
     loop {
         let guess = get_guess();

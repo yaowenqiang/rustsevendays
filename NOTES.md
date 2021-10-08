@@ -13,3 +13,5 @@
 # Documentation
 
 > cargo doc --open
+
+# RAII(Resource Allocation is initialization)

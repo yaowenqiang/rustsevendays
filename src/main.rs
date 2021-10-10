@@ -93,7 +93,8 @@ fn main() {
     //let sum = take_ownership_sum(values);
     let sum = borrow_sum(&values);
     println!("sum of {} values is {}", values.len(), sum);
-    values  = cap_values_owned(10, values);
+    // values  = cap_values_owned(3, values);
+    cap_values_borrow(3, &mut values);
     for v in values {
         println!("{}", v);
     }

@@ -1,3 +1,8 @@
+extern crate rayon;
+extern crate itertools;
+use rayon::*;
+use itertools::Itertools;
+
 //mod bodies;
 //use bodies::get_values;
 
@@ -33,6 +38,23 @@ fn merge_all_bodies_iter(bodies: &[Body]) -> Body {
 
 }
 
+fn merge_all_bodies_recurcive(bodies: &[Body]) -> Body {
+    println!("bodies: {}", bodies.len());
+    if bodies.len() == 1 {
+        return bodies[0];
+    }
+    let bodies: Vec<_> = bodies.iter().tuples().collect();
+
+    let mut merged_bodies: Vec<_> = tuples.into_par_iter().map(|(a,b)|{ merge_two_bodies(*a, *b)}).collect();
+
+    if bodies.len() % 2 != 0 {
+        merged_bodies.push(bodies[bodies.len() -1])
+    }
+
+    return merge_all_bodies_recurcive(&merged_bodies);
+
+}
+
 fn main() {
     //let bodies = get_values();
     let bodies = vec![
@@ -49,6 +71,7 @@ fn main() {
             mass: 15.0,
         }
     ];
-    let barycenter = merge_all_bodies_iter(&bodies);
+    //let barycenter = merge_all_bodies_iter(&bodies);
+    let barycenter = merge_all_bodies_recurcive(&bodies);
     println!("{:#?}", barycenter);
 }

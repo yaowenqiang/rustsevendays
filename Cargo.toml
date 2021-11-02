@@ -18,5 +18,7 @@ rayon = "1"
 [workspace]
 members = [
     "day2",
-    "day3"
+    "day3",
+    "day4",
+    "day5",
 ]

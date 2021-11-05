@@ -3,6 +3,12 @@
 version = 3
 
 [[package]]
+name = "anymap"
+version = "0.12.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "33954243bd79057c2de7338850b85983a44588021f8a5fee574a8888c6de4344"
+
+[[package]]
 name = "autocfg"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -162,6 +168,13 @@ name = "day7"
 version = "0.1.0"
 dependencies = [
  "itertools",
+]
+
+[[package]]
+name = "day8"
+version = "0.1.0"
+dependencies = [
+ "anymap",
 ]
 
 [[package]]

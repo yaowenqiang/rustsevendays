@@ -259,6 +259,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "day14"
+version = "0.1.0"
+dependencies = [
+ "fuse",
+ "libc",
+ "time",
+]
+
+[[package]]
 name = "day2"
 version = "0.1.0"
 dependencies = [
@@ -348,6 +357,19 @@ name = "fuchsia-cprng"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a06f77d526c1a601b7c4cdd98f54b5eaabffc14d5f2f0296febdc7f357c6d3ba"
+
+[[package]]
+name = "fuse"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "80e57070510966bfef93662a81cb8aa2b1c7db0964354fa9921434f04b9e8660"
+dependencies = [
+ "libc",
+ "log 0.3.9",
+ "pkg-config",
+ "thread-scoped",
+ "time",
+]
 
 [[package]]
 name = "futures"
@@ -1544,6 +1566,12 @@ dependencies = [
  "rand 0.4.6",
  "remove_dir_all",
 ]
+
+[[package]]
+name = "thread-scoped"
+version = "1.0.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bcbb6aa301e5d3b0b5ef639c9a9c7e2f1c944f177b460c04dc24c69b1fa2bd99"
 
 [[package]]
 name = "tiff"

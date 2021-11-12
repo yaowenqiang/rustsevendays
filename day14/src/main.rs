@@ -1,6 +1,11 @@
+#![feature(plugin)]
+
 extern crate fuse;
 extern crate libc;
 extern crate time;
+extern crate rustc_serialize;
+use rustc_serialize::json;
+use serde_json::json;
 
 use std::env;
 use std::path::Path;
@@ -8,7 +13,9 @@ use libc::{ENOENT, ENOSYS};
 use time::Timespec;
 use fuse::{FileAttr, FileType, Filesystem, Request, ReplyAttr, ReplyData, ReplyEntry, ReplyDirectory};
 
-struct JsonFilesystem;
+struct JsonFilesystem{
+    tree: json::Object
+}
 
 impl Filesystem for JsonFilesystem {
     fn getattr(&mut self, _req: &Request, ino: u64, reply: ReplyAttr) {
@@ -41,12 +48,34 @@ impl Filesystem for JsonFilesystem {
 
     fn readdir(&mut self, _req: &Request, ino: u64, fh: u64, offset: i64, mut reply: ReplyDirectory) {
         println!("readdir(ino={}, fh={}, offset={}", ino, fh, offset);
-        reply.error(ENOSYS);
+        for (i, key) in self.tree.keys().enumerate() {
+            let inode: u64 = 2 + i as u64;
+            let offset: i64 = 2 + i as i64;
+            reply.add(inode, offset, FileType::RegularFile, &Path::new(key));
+
+        }
+        if ino == 1 {
+            if offset == 0 {
+                reply.add(1, 0, FileType::Directory, &Path::new("."));
+                reply.add(1, 0, FileType::Directory, &Path::new(".."));
+            }
+            //reply.error(ENOSYS);
+            reply.ok();
+        } else {
+            reply.error(ENOSYS);
+        }
     }
 
 }
 
 fn main() {
+    let data = json!({
+        "foo": "bar",
+        "answer": 42,
+    });
+    let tree = data.as_object().unwrap();
+    let fs = JsonFilesystem{tree: tree.clone()};
+
     let mountpoint = match env::args().nth(1) {
         Some(path) => path,
         None => {

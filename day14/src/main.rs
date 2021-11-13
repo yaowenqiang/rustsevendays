@@ -1,11 +1,9 @@
-#![feature(plugin)]
-
 extern crate fuse;
 extern crate libc;
 extern crate time;
 extern crate rustc_serialize;
-use rustc_serialize::json;
-use serde_json::json;
+//use rustc_serialize::json;
+use serde_json::{json, Value, Error, from_str};
 
 use std::env;
 use std::path::Path;
@@ -14,7 +12,7 @@ use time::Timespec;
 use fuse::{FileAttr, FileType, Filesystem, Request, ReplyAttr, ReplyData, ReplyEntry, ReplyDirectory};
 
 struct JsonFilesystem{
-    tree: json::Object
+    tree: Vec<Value>
 }
 
 impl Filesystem for JsonFilesystem {
@@ -48,7 +46,7 @@ impl Filesystem for JsonFilesystem {
 
     fn readdir(&mut self, _req: &Request, ino: u64, fh: u64, offset: i64, mut reply: ReplyDirectory) {
         println!("readdir(ino={}, fh={}, offset={}", ino, fh, offset);
-        for (i, key) in self.tree.keys().enumerate() {
+        for item in self.tree.iter() {
             let inode: u64 = 2 + i as u64;
             let offset: i64 = 2 + i as i64;
             reply.add(inode, offset, FileType::RegularFile, &Path::new(key));
@@ -68,12 +66,13 @@ impl Filesystem for JsonFilesystem {
 
 }
 
-fn main() {
-    let data = json!({
+fn main(){
+    let input = r#"
+    {
         "foo": "bar",
-        "answer": 42,
-    });
-    let tree = data.as_object().unwrap();
+        "answer": "42",
+    }"#;
+    let tree : Vec<Value> = from_str(input).expect("wrong !");
     let fs = JsonFilesystem{tree: tree.clone()};
 
     let mountpoint = match env::args().nth(1) {

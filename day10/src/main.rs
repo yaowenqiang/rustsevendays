@@ -12,7 +12,7 @@ fn sql_macro() {
 
 fn main() {
     let dsn = "postgresql://rust:rust@localhost/rust";
-    let conn = match connection::connect(dsn, TlsMode::None) {]
+    let conn = match connection::connect(dsn, TlsMode::None) {
         Ok(conn) => conn,
-    }
+    };
 }

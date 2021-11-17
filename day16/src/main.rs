@@ -1,7 +1,10 @@
 extern crate redis;
+extern crate rand;
 use redis::{Client, Commands, Connection, RedisResult};
 use std::collections::HashSet;
 type UserId = u64;
+
+type Leaderboard = Vec<(String, u32)>;
 
 fn main() {
     println!("24 days of Rust - redis (day 18)");
@@ -22,6 +25,14 @@ fn main() {
     println!("You have {} friends in common.", 
              friends_in_common(&mut conn, 2, 3).
              map(|s| s.len()).unwrap_or(0));
+
+    let players = vec!["raynor", "kerrigan", "mengsk", "zasz", "tassadar"];
+    for player in &players {
+        let score = rand::random::<u32>() % 1000;
+        add_score(&mut conn, *player, score).expect("Nuclear launch detected");
+    }
+
+    show_leaderboard(&mut conn, 3);
 }
 
 fn add_friend(conn: &mut Connection, my_id: UserId, their_id: UserId) -> RedisResult<()> {
@@ -36,5 +47,21 @@ fn friends_in_common(conn: &mut Connection, my_id: UserId, their_id: UserId) -> 
     let my_key = format!("friends:{}", my_id);
     let their_key = format!("friends:{}", their_id);
     conn.sinter((my_key, their_key))
+}
 
+fn add_score(conn: &mut Connection, user_name: &str, score: u32) -> RedisResult<()> {
+    conn.zadd("leaderboard", user_name, score)
+}
+
+fn show_leaderboard(conn: &mut Connection, n: isize) {
+    let result :RedisResult<Leaderboard> = conn.zrevrange_withscores("leaderboard", 0, n-1);
+    match result {
+        Ok(board) => {
+            println!("---=== Top {} players ===---", n);
+            for (i,(username, score)) in board.into_iter().enumerate() {
+                println!("{:<5} {:^20} {:>4}", i+1, username, score);
+            }
+        },
+        Err(_) => println!(" Failed to fetch leaderboard."),
+    }
 }

@@ -306,7 +306,9 @@ dependencies = [
 name = "day18"
 version = "0.1.0"
 dependencies = [
+ "rand 0.8.4",
  "rust-crypto",
+ "rustc-serialize",
 ]
 
 [[package]]

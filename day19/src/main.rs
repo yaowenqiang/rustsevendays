@@ -1,8 +1,8 @@
 extern crate rayon;
 use rayon::prelude::*;
 
-fn semicircle(x: f64, r: f64) -> f64 {
-    (r * r - x * x).sqrt()
+fn semicircle(x: f64) -> f64 {
+    (1f64 - x * x).sqrt()
 }
 
 fn integrate<F>(f: F, points: usize) -> f64 
@@ -30,5 +30,5 @@ where F: Fn(f64) -> f64 + Sync
 }
 fn main() {
     println!("sequential: {}", 4f64 * integrate(semicircle, 10_000_000));
-    println!("parallel: {}", 4f64 * parallel_integrate(semicircle, 10_000_000));
+    println!("parallel  : {}", 4f64 * parallel_integrate(semicircle, 10_000_000));
 }

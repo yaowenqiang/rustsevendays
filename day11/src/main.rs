@@ -12,18 +12,16 @@ fn main() {
 
     //let img: RgbImage = ImageBuffer::new(512,512);
 
-    let mut img = ImageBuffer::from_fn(512,512, | x, y |  {
+    let mut img = ImageBuffer::from_fn(512, 512, |x, y| {
         if x % 2 == 0 {
             image::Luma([0u8])
         } else {
             image::Luma([255u8])
         }
-        
     });
 
     let (width, height) = img.dimensions();
     println!("image width : {}, image height: {}", width, height);
-
 
     let pixel = img[(100, 100)];
 
@@ -34,6 +32,4 @@ fn main() {
     }
 
     img.save("test.png").unwrap();
-        
-
 }

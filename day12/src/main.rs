@@ -1,7 +1,6 @@
 use uuid::Uuid;
 
-fn main() -> Result<(), uuid::Error>{
-
+fn main() -> Result<(), uuid::Error> {
     let my_uuid = Uuid::new_v4();
     println!("{}", my_uuid);
 

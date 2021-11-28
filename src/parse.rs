@@ -8,7 +8,7 @@ pub enum ParseMoneyError {
     NoDigitErr(char),
     TooFarErr,
 }
-pub fn parse_sym_money(s:&str, sym:char, dpoint:usize) -> Result<i32, ParseMoneyError> {
+pub fn parse_sym_money(s: &str, sym: char, dpoint: usize) -> Result<i32, ParseMoneyError> {
     let (c, v) = parse_money(s, dpoint)?;
     if c != sym {
         return Err(ParseMoneyError::SymbolErr);
@@ -16,7 +16,7 @@ pub fn parse_sym_money(s:&str, sym:char, dpoint:usize) -> Result<i32, ParseMoney
     Ok(v)
 }
 
-pub fn parse_money(s:&str, dpoint:usize) -> Result<(char, i32),ParseMoneyError> {
+pub fn parse_money(s: &str, dpoint: usize) -> Result<(char, i32), ParseMoneyError> {
     let mut it = s.trim().chars();
     let mut neg = false;
 
@@ -28,7 +28,7 @@ pub fn parse_money(s:&str, dpoint:usize) -> Result<(char, i32),ParseMoneyError> 
     }
 
     let mut res: i32 = 0;
-    let mut point_pos:Option<usize> = None;
+    let mut point_pos: Option<usize> = None;
     for c in it {
         if c == '.' {
             if point_pos != None {
@@ -39,16 +39,16 @@ pub fn parse_money(s:&str, dpoint:usize) -> Result<(char, i32),ParseMoneyError> 
         }
 
         if c < '0' || c > '9' {
-            return Err(NoDigitErr(c))
+            return Err(NoDigitErr(c));
         }
 
         res *= 10;
         res += c as i32 - 48;
 
         if let Some(pp) = point_pos {
-            point_pos = Some(pp+1);
+            point_pos = Some(pp + 1);
             if pp >= dpoint {
-                return Err(TooFarErr)
+                return Err(TooFarErr);
             }
         }
     }
@@ -69,7 +69,7 @@ mod tests {
     #[test]
 
     fn parsean() {
-        let (c,v) = parse_money("£34.3", 2).unwrap();
+        let (c, v) = parse_money("£34.3", 2).unwrap();
         assert_eq!(c, '£');
         assert_eq!(v, 3430);
 

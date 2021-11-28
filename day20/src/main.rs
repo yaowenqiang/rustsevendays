@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate slog;
-extern crate time;
 extern crate slog_term;
+extern crate time;
 
 use slog::Drain;
 
@@ -32,5 +32,4 @@ fn main() {
 
     let user = User::new("jacky", &root_logger);
     user.sign_in();
-
 }

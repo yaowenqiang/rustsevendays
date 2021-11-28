@@ -1,7 +1,6 @@
 //#![feature(proc_macro)]
 
 #[macro_use]
-
 extern crate serde_derive;
 extern crate serde_json;
 extern crate serde_yaml;
@@ -23,7 +22,7 @@ struct Task {
 
 #[derive(Deserialize, Debug)]
 struct Play {
-    #[serde(rename="hosts")]
+    #[serde(rename = "hosts")]
     host_list: String,
     tasks: Vec<Task>,
 }

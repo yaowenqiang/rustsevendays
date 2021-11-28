@@ -1,7 +1,7 @@
 extern crate hyper;
 
+use hyper::Client;
 use std::io::Read;
-use hyper::{Client};
 fn main() {
     let client = Client::new();
     let url = "https://ifconfig.me/";

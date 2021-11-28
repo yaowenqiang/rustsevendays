@@ -1,15 +1,14 @@
 extern crate csv;
-use std::error::Error;
 use csv::{Reader, Writer};
+use std::error::Error;
 fn main() {
     write();
 }
 
-fn write()->Result<(), Box<dyn Error>>{
-
+fn write() -> Result<(), Box<dyn Error>> {
     let doller_files = vec![
         ["A Fistful of Dollars", "Rojo", "1964"],
-        ["For a Few Dollars More","Ei Indio", "1965"],
+        ["For a Few Dollars More", "Ei Indio", "1965"],
         ["the Good, the Bad and the Ugly", "Tuco", "1966"],
     ];
 
@@ -21,4 +20,3 @@ fn write()->Result<(), Box<dyn Error>>{
     }
     Ok(())
 }
-

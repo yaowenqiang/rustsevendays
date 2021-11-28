@@ -1,15 +1,15 @@
 extern crate rand;
-use rand::{Rng,random};
+use rand::{random, Rng};
 use std::collections::HashMap;
 use std::env::args;
-use std::ops::Add;
-use std::env::{var,set_var};
-use std::process::{Command, Stdio};
-use std::io::{Read, Write, copy};
+use std::env::{set_var, var};
 use std::fs::File;
-use std::thread::{spawn, sleep};
-use std::time::Duration;
 use std::io;
+use std::io::{copy, Read, Write};
+use std::ops::Add;
+use std::process::{Command, Stdio};
+use std::thread::{sleep, spawn};
+use std::time::Duration;
 
 pub mod fib;
 use fib::*;
@@ -18,44 +18,44 @@ use randguess::*;
 pub mod ownership;
 use ownership::*;
 
-pub fn road_len() -> usize{
+pub fn road_len() -> usize {
     let e = var("ROAD").unwrap_or("".to_string());
     e.len()
 }
 
-pub fn rail_len() -> usize{
+pub fn rail_len() -> usize {
     let s = var("GWR").unwrap_or("".to_string());
     _rail_len(&s)
 }
-pub fn _rail_len(s:&str) -> usize{
+pub fn _rail_len(s: &str) -> usize {
     s.len()
 }
 #[derive(Debug)]
-pub struct Point{
-    x:i32,
-    y:i32,
+pub struct Point {
+    x: i32,
+    y: i32,
 }
 impl Point {
-    fn random() -> Self{
+    fn random() -> Self {
         let mut tr = rand::thread_rng();
-        Point{
+        Point {
             x: tr.gen(),
             y: tr.gen(),
         }
     }
 }
 impl Add for Point {
-    type  Output = Point;
-    fn add(self, other:Point) -> Self::Output {
-        Point{
-            x:self.x + other.x,
-            y:self.y + other.y,
+    type Output = Point;
+    fn add(self, other: Point) -> Self::Output {
+        Point {
+            x: self.x + other.x,
+            y: self.y + other.y,
         }
     }
 }
 
 #[derive(Debug)]
-pub struct User{
+pub struct User {
     name: String,
     age: i32,
     shoeSize: i32,
@@ -63,13 +63,13 @@ pub struct User{
 }
 
 #[derive(Debug)]
-pub struct Bed{
-    size:i32,
-    count:u32,
+pub struct Bed {
+    size: i32,
+    count: u32,
 }
 
 #[derive(Debug)]
-pub enum Room{
+pub enum Room {
     Kitchen(i32),
     Bedroom(Bed),
     Lounge(i32, String),
@@ -78,9 +78,12 @@ pub enum Room{
 impl User {
     //fn simple_string(&mut self) {
     fn simple_string(&self) -> String {
-        format!("{} - {} - {}cm shoe: {}", self.name, self.age, self.height, self.shoeSize)
+        format!(
+            "{} - {} - {}cm shoe: {}",
+            self.name, self.age, self.height, self.shoeSize
+        )
     }
-    fn grow(&mut self, h:i32) {
+    fn grow(&mut self, h: i32) {
         self.height += h;
     }
     fn die(self) {
@@ -89,7 +92,7 @@ impl User {
 }
 
 fn main() {
-    let mut values = vec![1,2,3,4,5];
+    let mut values = vec![1, 2, 3, 4, 5];
     //let sum = take_ownership_sum(values);
     let sum = borrow_sum(&values);
     println!("sum of {} values is {}", values.len(), sum);
@@ -137,27 +140,27 @@ fn main() {
     let mut t = File::create("data/to.md").expect("can not create file");
     // copy(&mut f, &mut t).expect("can not copy file");
     t.write_all(&s.into_bytes()).expect("can't write all");
-    //pipe 
+    //pipe
     let c = Command::new("espeak")
-                     .stdin(Stdio::piped())
-                     .spawn()
-                     .expect("command didn't run");
+        .stdin(Stdio::piped())
+        .spawn()
+        .expect("command didn't run");
     let d = Command::new("cat")
-                    .arg("data/tosay.md")
-                    .stdout(Stdio::piped())
-                    .spawn()
-                    .expect("cat didn't run right");
+        .arg("data/tosay.md")
+        .stdout(Stdio::piped())
+        .spawn()
+        .expect("cat didn't run right");
     copy(&mut d.stdout.unwrap(), &mut c.stdin.unwrap());
-    
+
     // call other process
     let c = Command::new("ls")
-                .arg("-l")
-                .output()
-                .expect("LS not usable");
+        .arg("-l")
+        .output()
+        .expect("LS not usable");
     let c_out = String::from_utf8(c.stdout).expect("NOT UTF*able");
     println!("{}", c_out);
     for (n, ln) in c_out.split("\n").enumerate() {
-        println!("Line: {} : {}",n, ln );
+        println!("Line: {} : {}", n, ln);
     }
 
     //environment variables
@@ -169,17 +172,14 @@ fn main() {
     let r_len = road_len();
     println!("{}", r_len);
 
-
     //traits
 
-    let a = Point{x:3, y:5};
-    let b = Point{x:30, y:50};
+    let a = Point { x: 3, y: 5 };
+    let b = Point { x: 30, y: 50 };
     let c = a + b;
     println!("c = {:?}", c);
     let d = Point::random();
     println!("d = {:?}", d);
-
-
 
     for a in args() {
         //assignment
@@ -201,7 +201,7 @@ fn main() {
         _ => "Nothing",
     };
     println!("{}", r);
-    
+
     let r = hm.get(&5).unwrap();
     println!("{}", r);
     let r1 = hm.get(&4).unwrap_or(&"NoString");
@@ -250,21 +250,21 @@ fn main() {
     if let Lounge(n, s) = l {
         println!("Its a {} Lounge with {} cupboards", n, s);
     }
-    let mut u = User{
+    let mut u = User {
         name: "Jack".to_string(),
         age: 33,
         height: 255,
         shoeSize: 10,
     };
-    println!("{:?}",u);
-    println!("User is {}",u.simple_string());
+    println!("{:?}", u);
+    println!("User is {}", u.simple_string());
     u.grow(10);
-    println!("User is {}",u.simple_string());
+    println!("User is {}", u.simple_string());
     u.die();
     //u.die();
     //u.grow(10);
 
-    let b  = highest(4, 2, 8);
+    let b = highest(4, 2, 8);
     let s = format!("{} is highest", b);
     let o = other(1, 2);
     println!("{}", s);
@@ -286,7 +286,7 @@ fn main() {
     for (i, c) in s.chars().enumerate() {
         println!("{} = {}", i, c);
     }
-    for (i, c) in s.char_indices(){
+    for (i, c) in s.char_indices() {
         println!("{} = {}", i, c);
     }
     for c in s.bytes() {
@@ -294,7 +294,7 @@ fn main() {
     }
 }
 
-fn highest(a:i32, b: u32, c: i8) -> i32 {
+fn highest(a: i32, b: u32, c: i8) -> i32 {
     let mut res = a;
     if b as i32 > res {
         res = b as i32;
@@ -305,7 +305,7 @@ fn highest(a:i32, b: u32, c: i8) -> i32 {
     res
 }
 
-fn other(a:i32, b: i32) -> i32 {
+fn other(a: i32, b: i32) -> i32 {
     let mut c = a + b;
     c = c % 4;
     c = c / 2;
@@ -313,7 +313,7 @@ fn other(a:i32, b: i32) -> i32 {
     c
 }
 
-fn loop_to_10(){
+fn loop_to_10() {
     for n in 0..10 {
         println!("hello {}", n);
     }
@@ -330,14 +330,13 @@ fn array_loop() {
     for n in v {
         println!("{}", n);
     }
-
 }
 
 fn array_loop2() {
-    let v = vec![1,2,3,4];
+    let v = vec![1, 2, 3, 4];
     'outer: for i in 0..10 {
         for n in &v {
-            if i+n >= 10 {
+            if i + n >= 10 {
                 //continue;
                 break 'outer;
             }
@@ -347,22 +346,20 @@ fn array_loop2() {
             }
             println!("{}", n);
         }
-
     }
-
 }
 
-fn count_l(s:&str) -> i32 {
+fn count_l(s: &str) -> i32 {
     let mut res = 0;
     for c in s.chars() {
         if c == 'l' {
-            res +=1;
+            res += 1;
         }
     }
     res
 }
 
-fn get_arg(n:usize) -> Result<String, String> {
+fn get_arg(n: usize) -> Result<String, String> {
     for (i, a) in args().enumerate() {
         if i == n {
             return Ok(a);

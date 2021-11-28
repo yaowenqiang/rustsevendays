@@ -1,5 +1,5 @@
 extern crate zmq;
-use zmq::{Context, Message, Error};
+use zmq::{Context, Error, Message};
 fn main() {
     let args = std::env::args().collect::<Vec<_>>();
     if args.len() < 2 {
@@ -23,12 +23,11 @@ fn run_client(ctx: &mut Context, addr: &str) -> Result<(), Error> {
     let payload = "Hello World!";
     println!("{:?}", payload);
     let mut msg = Message::new();
-    sock.send(payload.as_bytes(),0)?;
+    sock.send(payload.as_bytes(), 0)?;
     sock.recv(&mut msg, 0)?;
     let contents = msg.as_str().unwrap();
     println!("{:?}", contents);
     Ok(())
-
 }
 
 fn run_server(ctx: &mut Context, addr: &str) -> Result<(), Error> {

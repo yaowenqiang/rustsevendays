@@ -1,6 +1,6 @@
 extern crate anymap;
-use std::net::Ipv4Addr;
 use anymap::AnyMap;
+use std::net::Ipv4Addr;
 
 #[derive(Debug)]
 enum HostAddress {
@@ -11,10 +11,8 @@ enum HostAddress {
 #[derive(Debug)]
 struct Port(u32);
 
-
 #[derive(Debug)]
 struct ConnectionLimit(u32);
-
 
 fn main() {
     let mut config = AnyMap::new();

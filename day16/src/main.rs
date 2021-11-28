@@ -1,5 +1,5 @@
-extern crate redis;
 extern crate rand;
+extern crate redis;
 use redis::{Client, Commands, Connection, RedisResult};
 use std::collections::HashSet;
 type UserId = u64;
@@ -13,18 +13,21 @@ fn main() {
     let my_id: UserId = 1;
     let their_id: UserId = 2;
 
-    add_friend(&mut conn,my_id, their_id).expect("friendship failed!");
+    add_friend(&mut conn, my_id, their_id).expect("friendship failed!");
 
     let answer: i32 = conn.get("answer").unwrap();
     println!("Answer: {}", answer);
 
-    for i in 1 ..10u64 {
+    for i in 1..10u64 {
         add_friend(&mut conn, i, i + 2).expect("Friendship failed :(");
     }
 
-    println!("You have {} friends in common.", 
-             friends_in_common(&mut conn, 2, 3).
-             map(|s| s.len()).unwrap_or(0));
+    println!(
+        "You have {} friends in common.",
+        friends_in_common(&mut conn, 2, 3)
+            .map(|s| s.len())
+            .unwrap_or(0)
+    );
 
     let players = vec!["raynor", "kerrigan", "mengsk", "zasz", "tassadar"];
     for player in &players {
@@ -43,7 +46,11 @@ fn add_friend(conn: &mut Connection, my_id: UserId, their_id: UserId) -> RedisRe
     Ok(())
 }
 
-fn friends_in_common(conn: &mut Connection, my_id: UserId, their_id: UserId) -> RedisResult<HashSet<UserId>> {
+fn friends_in_common(
+    conn: &mut Connection,
+    my_id: UserId,
+    their_id: UserId,
+) -> RedisResult<HashSet<UserId>> {
     let my_key = format!("friends:{}", my_id);
     let their_key = format!("friends:{}", their_id);
     conn.sinter((my_key, their_key))
@@ -54,14 +61,14 @@ fn add_score(conn: &mut Connection, user_name: &str, score: u32) -> RedisResult<
 }
 
 fn show_leaderboard(conn: &mut Connection, n: isize) {
-    let result :RedisResult<Leaderboard> = conn.zrevrange_withscores("leaderboard", 0, n-1);
+    let result: RedisResult<Leaderboard> = conn.zrevrange_withscores("leaderboard", 0, n - 1);
     match result {
         Ok(board) => {
             println!("---=== Top {} players ===---", n);
-            for (i,(username, score)) in board.into_iter().enumerate() {
-                println!("{:<5} {:^20} {:>4}", i+1, username, score);
+            for (i, (username, score)) in board.into_iter().enumerate() {
+                println!("{:<5} {:^20} {:>4}", i + 1, username, score);
             }
-        },
+        }
         Err(_) => println!(" Failed to fetch leaderboard."),
     }
 }

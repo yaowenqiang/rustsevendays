@@ -5,7 +5,7 @@ fn sql_macro() {
     println("{:?}", query);
 }
 
-#[cfg(not(target_family="unix"))]
+#[cfg(not(target_family = "unix"))]
 fn sql_macro() {
     println!("TODO");
 }

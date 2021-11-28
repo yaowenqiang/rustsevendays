@@ -21,7 +21,6 @@ pub fn handle_guess(guess: u8, correct: u8) -> bool {
     if guess < correct {
         println!("Too low.");
         false
-
     } else if guess > correct {
         println!("Too high.");
         false

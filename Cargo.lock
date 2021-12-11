@@ -832,6 +832,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "day38"
+version = "0.1.0"
+dependencies = [
+ "monoio",
+]
+
+[[package]]
 name = "day4"
 version = "0.1.0"
 
@@ -1330,6 +1337,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "fxhash"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c31b6d751ae2c7f11320402d34e41349dd1016f8d5d45e48c4312bc8625af50c"
+dependencies = [
+ "byteorder",
+]
+
+[[package]]
 name = "gcc"
 version = "0.3.55"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1683,6 +1699,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "io-uring"
+version = "0.5.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8d75829ed9377bab6c90039fe47b9d84caceb4b5063266142e21bcce6550cda8"
+dependencies = [
+ "bitflags 1.3.2",
+ "libc",
+]
+
+[[package]]
 name = "ipnet"
 version = "2.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2015,6 +2041,37 @@ dependencies = [
 ]
 
 [[package]]
+name = "monoio"
+version = "0.0.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0e335e0ff44a9e4597a447fc90ab5ddec780087d92955a2f2191b154580ef97d"
+dependencies = [
+ "bytes",
+ "futures",
+ "fxhash",
+ "io-uring",
+ "libc",
+ "monoio-macros",
+ "nix",
+ "os_socketaddr",
+ "pin-project-lite",
+ "pin-utils",
+ "scoped-tls",
+ "socket2",
+]
+
+[[package]]
+name = "monoio-macros"
+version = "0.0.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6325558656381b6c07a52d3947f732c0070b233c179f5ca60c5fecaf9a8f0a3f"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "nalgebra"
 version = "0.29.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2068,6 +2125,19 @@ dependencies = [
  "cc",
  "libc",
  "pkg-config",
+]
+
+[[package]]
+name = "nix"
+version = "0.23.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f305c2c2e4c39a82f7bf0bf65fb557f9070ce06781d4f2454295cc34b1c43188"
+dependencies = [
+ "bitflags 1.3.2",
+ "cc",
+ "cfg-if",
+ "libc",
+ "memoffset",
 ]
 
 [[package]]
@@ -2333,6 +2403,16 @@ dependencies = [
  "gcc",
  "libc",
  "openssl-sys 0.7.17",
+]
+
+[[package]]
+name = "os_socketaddr"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "87ff86dee67903f9ffcc3f09712b934761ace77cd34021848a474e7ed7199bd2"
+dependencies = [
+ "libc",
+ "winapi 0.3.9",
 ]
 
 [[package]]
@@ -3056,6 +3136,12 @@ dependencies = [
  "lazy_static 1.4.0",
  "winapi 0.3.9",
 ]
+
+[[package]]
+name = "scoped-tls"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ea6a9290e3c9cf0f18145ef7ffa62d68ee0bf5fcd651017e586dc7fd5da448c2"
 
 [[package]]
 name = "scoped_threadpool"

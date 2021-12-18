@@ -1,4 +1,4 @@
-struct Sleep {
+struct Sheep {
     naked: bool, 
     name: &'static str 
 }
@@ -6,16 +6,15 @@ trait Animal {
     fn new(name: &'static str) -> Self;
     fn name(&self) -> &'static str;
     fn noise(&self) -> &'static str;
-
-    fn take(&self) {
+    fn talk(&self) {
         println!("{} says {}", self.name(), self.noise());
     }
     
 }
 
 impl Sheep {
-    fn is_named(&self) -> bool {
-        self.named
+    fn is_naked(&self) -> bool {
+        self.naked
     }
 
     fn shear(&mut self) {
@@ -31,6 +30,10 @@ impl Sheep {
 impl Animal for Sheep {
     fn new(name: &'static str) -> Sheep {
         Sheep {name: name, naked: false }
+    }
+
+    fn name(&self) -> &'static str {
+        self.name
     }
 
     fn noise(&self) -> &'static str {
@@ -49,7 +52,7 @@ impl Animal for Sheep {
 fn main() {
     let mut dolly: Sheep = Animal::new("Dolly");
     dolly.talk();
-    dolly.sheer();
+    dolly.shear();
     dolly.talk();
     
 }

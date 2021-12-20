@@ -10,3 +10,7 @@ edition = "2018"
 [[bin]]
 name="derive"
 path="src/derive.rs"
+
+[[bin]]
+name="dyn"
+path="src/dyn.rs"

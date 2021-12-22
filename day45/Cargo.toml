@@ -14,3 +14,7 @@ path="src/derive.rs"
 [[bin]]
 name="dyn"
 path="src/dyn.rs"
+
+[[bin]]
+name="drop"
+path="src/drop.rs"

@@ -18,3 +18,7 @@ path="src/dyn.rs"
 [[bin]]
 name="drop"
 path="src/drop.rs"
+
+[[bin]]
+name="iterator"
+path="src/iterator.rs"

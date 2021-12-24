@@ -22,3 +22,7 @@ path="src/drop.rs"
 [[bin]]
 name="iterator"
 path="src/iterator.rs"
+
+[[bin]]
+name="impl"
+path="src/impl.rs"

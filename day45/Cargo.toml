@@ -26,3 +26,7 @@ path="src/iterator.rs"
 [[bin]]
 name="impl"
 path="src/impl.rs"
+
+[[bin]]
+name="clone"
+path="src/clone.rs"
